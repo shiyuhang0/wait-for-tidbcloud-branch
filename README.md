@@ -23,6 +23,7 @@ The action supports the following inputs:
 - privateKey - (required) The private key of TiDB Cloud api. Generate it from [TiDB Cloud](https://tidbcloud.com/).
 - intervalSeconds - (optional) The interval seconds to check the status of TiDB Cloud Branch check. Default is 10.
 - timeoutSeconds - (optional) The timeout seconds to wait for TiDB Cloud Branch check. Default is 300.
+- addMask - (optional) Whether to add mask for the password output. Default is true.
 
 ## Outputs
 
@@ -56,7 +57,7 @@ steps:
         echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
 ```
 
-Here is an example of how to use this action for multiple jobs:
+Here is an example of how to use this action for multiple jobs. You must set addMask to false if you want to use the password in other jobs.
 
 ```
 jobs:
@@ -70,6 +71,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           publicKey: ${{ secrets.TIDB_CLOUD_API_PUBLIC_KEY }}
           privateKey: ${{ secrets.TIDB_CLOUD_API_PRIVATE_KEY }}
+          addMask: false
     outputs:
       user: ${{ steps.wait-for-branch.outputs.user }}
       host: ${{ steps.wait-for-branch.outputs.host }}
@@ -83,7 +85,7 @@ jobs:
         run: |
           echo "The host is ${{ needs.setup.outputs.host }}"
           echo "The user is ${{ needs.setup.outputs.user }}"
-          echo "The port is ${{ needs.setup.outputs.port }}"       
+          echo "The password is ${{ needs.setup.outputs.password }}"       
 ```
 
 

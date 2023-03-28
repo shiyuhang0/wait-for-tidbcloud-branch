@@ -34,9 +34,10 @@ async function run(): Promise<void> {
     }
 
     const sqlUser = await sqluser(result.externalID, msg => core.info(msg))
-    core.setSecret(sqlUser.host)
-    core.setSecret(sqlUser.user)
-    core.setSecret(sqlUser.password)
+    if (core.getInput('addMask') === 'true') {
+      core.info('addMask is true, set secret for sql user password')
+      core.setSecret(sqlUser.password)
+    }
     core.setOutput('host', sqlUser.host)
     core.setOutput('user', sqlUser.user)
     core.setOutput('password', sqlUser.password)

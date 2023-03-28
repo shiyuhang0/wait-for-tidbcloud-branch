@@ -18,6 +18,9 @@ inputs:
     description: 'The public key of TiDB Cloud API.'
   privetKey:
     description: 'The private key of TiDB Cloud API.'
+  addMask:
+    description: 'Whether to add mask for the output.'
+    default: 'true'
 
 runs:
   using: 'node16'
