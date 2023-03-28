@@ -71,6 +71,7 @@ function run() {
             core.setSecret(sqlUser.host);
             core.info(sqlUser.host);
             core.setSecret(sqlUser.user);
+            core.exportVariable('host', sqlUser.host);
             // core.setSecret(sqlUser.password)
             core.setOutput('host', sqlUser.host);
             core.setOutput('user', sqlUser.user);
