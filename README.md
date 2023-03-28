@@ -57,7 +57,10 @@ steps:
         echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
 ```
 
-Here is an example of how to use this action for multiple jobs. You must set addMask to false if you want to use the password in other jobs.
+Here is an example of how to use this action for multiple jobs. 
+
+> You must set addMask to false if you want to use the password in other jobs. Because GitHub action does not support sharing secrets between jobs now. See [this discussion](https://github.com/orgs/community/discussions/13082) for more details.
+
 
 ```
 jobs:
