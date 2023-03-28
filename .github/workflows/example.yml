@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Use the output
         run: |
-          echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
-          echo "The user is ${{ steps.wait-for-branch.outputs.user }}"
-          echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
-          echo "The port is ${{ steps.wait-for-branch.outputs.port }}"
+          echo "The host is ${{ needs.setup.outputs.host }}"
+          echo "The user is ${{ needs.setup.outputs.user }}"
+          echo "The password is ${{ needs.setup.outputs.password }}"
+          echo "The port is ${{ needs.setup.outputs.port }}"
