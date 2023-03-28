@@ -23,7 +23,9 @@ export async function sqluser(
   log: (message: string) => void
 ): Promise<SqlUser> {
   const branchInfo: BranchInfo = JSON.parse(externalID)
-  const {projectID, clusterID, branchID} = branchInfo
+  const projectID = branchInfo.projectID
+  const clusterID = branchInfo.clusterID
+  const branchID = branchInfo.branchID
   log(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
