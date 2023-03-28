@@ -24,10 +24,16 @@ export async function sqluser(
 ): Promise<SqlUser> {
   log(`Start to get Sql User with externalID ${externalID}`)
   const branchInfo: BranchInfo = JSON.parse(externalID)
-  log(`branchInfo  ${branchInfo}`)
   const projectID = branchInfo.project_id
   const clusterID = branchInfo.cluster_id
   const branchID = branchInfo.branch_id
+  if (
+    projectID === undefined ||
+    clusterID === undefined ||
+    branchID === undefined
+  ) {
+    throw new Error('Invalid externalID from TiDB Cloud Branch check')
+  }
   log(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )

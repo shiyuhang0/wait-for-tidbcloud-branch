@@ -24,7 +24,7 @@ async function run(): Promise<void> {
 
     // check result
     if (result.conclusion === null || result.conclusion === '') {
-      throw new Error('conclusion is empty')
+      throw new Error('TiDB Cloud Branch check conclusion is empty')
     }
     if (result.conclusion !== 'success') {
       throw new Error('TiDB Cloud Branch check failed')
