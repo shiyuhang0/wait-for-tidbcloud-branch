@@ -34,12 +34,9 @@ async function run(): Promise<void> {
     }
 
     const sqlUser = await sqluser(result.externalID, msg => core.info(msg))
-    core.info(sqlUser.host)
     core.setSecret(sqlUser.host)
-    core.info(sqlUser.host)
     core.setSecret(sqlUser.user)
-    core.exportVariable('host', sqlUser.host)
-    // core.setSecret(sqlUser.password)
+    core.setSecret(sqlUser.password)
     core.setOutput('host', sqlUser.host)
     core.setOutput('user', sqlUser.user)
     core.setOutput('password', sqlUser.password)
