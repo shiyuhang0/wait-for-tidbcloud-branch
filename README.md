@@ -81,7 +81,6 @@ jobs:
   test:
     needs: setup
     runs-on: ubuntu-latest
-    id: wait-for-branch
     steps:
       - name: Use the output
         run: |
