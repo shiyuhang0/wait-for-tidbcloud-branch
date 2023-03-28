@@ -15,10 +15,11 @@ jobs:
         id: wait-for-branch
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          publicKey: "fake"
+          privateKey: "fake"
     outputs:
       user: ${{ steps.wait-for-branch.outputs.user }}
       host: ${{ steps.wait-for-branch.outputs.host }}
-      port: ${{ steps.wait-for-branch.outputs.port }}
       password: ${{ steps.wait-for-branch.outputs.password }}
 
   test:
@@ -30,4 +31,3 @@ jobs:
           echo "The host is ${{ needs.setup.outputs.host }}"
           echo "The user is ${{ needs.setup.outputs.user }}"
           echo "The password is ${{ needs.setup.outputs.password }}"
-          echo "The port is ${{ needs.setup.outputs.port }}"

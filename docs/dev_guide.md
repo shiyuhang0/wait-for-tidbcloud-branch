@@ -2,7 +2,7 @@
 
 ### fmt
 
-Use `npm run lint --fix` to find and fix the fmt issues.
+Use `npm run lint  -- --fix` to find and fix the fmt issues.
 
 ### test
 

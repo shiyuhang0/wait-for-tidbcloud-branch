@@ -18,7 +18,7 @@ jobs:
       - run: npm ci
       - run: npm run all
       - run: |
-          npm run lint --fix
+          npm run lint  --  --fix
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
             echo "Detected uncommitted changes.  See status below:"
             git diff
