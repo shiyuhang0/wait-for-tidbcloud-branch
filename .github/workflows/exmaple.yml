@@ -1,6 +1,9 @@
 name: 'example'
 on:
   pull_request:
+    branches:
+      - main
+      - 'releases/*'
 
 
 jobs:
