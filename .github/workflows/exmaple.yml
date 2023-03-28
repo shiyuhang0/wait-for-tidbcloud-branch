@@ -1,0 +1,31 @@
+name: 'example'
+on:
+  pull_request:
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    id: wait-for-branch
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      user: ${{ steps.wait-for-branch.outputs.user }}
+      host: ${{ steps.wait-for-branch.outputs.host }}
+      port: ${{ steps.wait-for-branch.outputs.port }}
+      password: ${{ steps.wait-for-branch.outputs.password }}
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    id: wait-for-branch
+    steps:
+      - name: Use the output
+        run: |
+          echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
+          echo "The user is ${{ steps.wait-for-branch.outputs.user }}"
+          echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
+          echo "The port is ${{ steps.wait-for-branch.outputs.port }}"
