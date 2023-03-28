@@ -1,8 +1,11 @@
 import {wait} from '../src/wait'
+import {poll} from '../src/poll'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
 import {expect, test} from '@jest/globals'
+import {context, getOctokit} from "@actions/github";
+import * as core from "@actions/core";
 
 test('throws invalid number', async () => {
   const input = parseInt('foo', 10)

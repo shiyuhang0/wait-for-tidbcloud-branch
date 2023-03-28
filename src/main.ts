@@ -1,16 +1,40 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {context, getOctokit} from '@actions/github'
+import {poll} from './poll'
+import {sqluser} from './sqluser'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const token = core.getInput('token', {required: true})
+    const result = await poll({
+      client: getOctokit(token),
+      log: msg => core.info(msg),
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+      checkName: 'TiDB Cloud Branch',
+      owner: context.repo.owner,
+      repo: context.repo.repo,
+      ref: core.getInput('ref') || context.sha,
 
-    core.setOutput('time', new Date().toTimeString())
+      timeoutSeconds: parseInt(core.getInput('timeoutSeconds')),
+      intervalSeconds: parseInt(core.getInput('intervalSeconds'))
+    })
+
+    // check result
+    if (result.conclusion === null || result.conclusion === '') {
+      throw new Error('conclusion is empty')
+    }
+    if (result.conclusion !== 'success') {
+      throw new Error('TiDB Cloud Branch check failed')
+    }
+    if (result.externalID === null || result.externalID === '') {
+      throw new Error('externalID is empty with success conclusion')
+    }
+
+    const sqlUser = await sqluser(result.externalID, msg => core.info(msg))
+    core.setOutput('host', sqlUser.host)
+    core.setOutput('user', sqlUser.user)
+    core.setOutput('port', sqlUser.port)
+    core.setOutput('password', sqlUser.password)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "wait-for-tidbcloud-branch",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Wait for TiDBCloud branch to be ready. Only used on pull request",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -25,7 +25,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.10.0"
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.0",
