@@ -164,7 +164,9 @@ class SqlUser {
 exports.SqlUser = SqlUser;
 function sqluser(externalID, log) {
     return __awaiter(this, void 0, void 0, function* () {
+        log(`Start to get Sql User with externalID ${externalID}`);
         const branchInfo = JSON.parse(externalID);
+        log(`branchInfo  ${externalID}`);
         const projectID = branchInfo.projectID;
         const clusterID = branchInfo.clusterID;
         const branchID = branchInfo.branchID;
