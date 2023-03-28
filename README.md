@@ -3,7 +3,7 @@
 A JavaScript action that works with [TiDB Cloud App](https://github.com/apps/tidb-cloud). It allows you to:
 
 - Wait for TiDB Cloud Branch check which created by TiDB Cloud App to complete.
-- Generate a SQL user for this branch.
+- Generate a SQL user for this TiDB Cloud branch.
 
 ## Usage
 
@@ -28,10 +28,10 @@ The action supports the following inputs:
 
 The action provide the following outputs:
 
-- host - The host of the TiDB Cloud branch
-- user - The user of the TiDB Cloud branch
-- password - The password of the TiDB Cloud branch
-- port - The port of the TiDB Cloud branch
+- host - The host of the TiDB Cloud branch.
+- user - The user of the TiDB Cloud branch.
+- password - The password of the TiDB Cloud branch.
+- port - The port of the TiDB Cloud branch.
 
 Note that you will get empty output if you don't provide `apiPublicKey` and `apiPrivateKey`.
 
