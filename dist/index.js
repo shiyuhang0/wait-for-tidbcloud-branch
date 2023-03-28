@@ -67,9 +67,11 @@ function run() {
                 throw new Error('externalID is empty with success conclusion');
             }
             const sqlUser = yield (0, sqluser_1.sqluser)(result.externalID, msg => core.info(msg));
+            core.setSecret(sqlUser.host);
+            core.setSecret(sqlUser.user);
+            core.setSecret(sqlUser.password);
             core.setOutput('host', sqlUser.host);
             core.setOutput('user', sqlUser.user);
-            core.setOutput('port', sqlUser.port);
             core.setOutput('password', sqlUser.password);
         }
         catch (error) {
@@ -154,9 +156,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sqluser = exports.SqlUser = void 0;
 class SqlUser {
-    constructor(host, port, user, password) {
+    constructor(host, user, password) {
         this.host = host;
-        this.port = port;
         this.user = user;
         this.password = password;
     }
@@ -176,7 +177,7 @@ function sqluser(externalID, log) {
         }
         log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`);
         // TODO get sql user from TiDB Cloud API
-        return new SqlUser('fakehost', 4000, 'fakeuser', 'fakepassword');
+        return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });
 }
 exports.sqluser = sqluser;
