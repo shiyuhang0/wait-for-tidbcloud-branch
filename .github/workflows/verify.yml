@@ -1,4 +1,4 @@
-name: 'build-test'
+name: 'verify'
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -17,3 +17,10 @@ jobs:
           node-version: 16.x
       - run: npm ci
       - run: npm run all
+      - run: |
+          npm run lint --fix
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes.  See status below:"
+            git diff
+            exit 1
+          fi
