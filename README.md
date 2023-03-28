@@ -64,10 +64,10 @@ Here is an example of how to use this action for multiple jobs:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    id: wait-for-branch
     steps:
       - uses: actions/checkout@v3
-      - uses: ./
+      - uses: shiyuhang0/wait-for-tidbcloud-branch@v0
+        id: wait-for-branch
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           publicKey: ${{ secrets.TIDB_CLOUD_API_PUBLIC_KEY }}
