@@ -1,7 +1,7 @@
 interface BranchInfo {
-  projectID: number
-  clusterID: number
-  branchID: number
+  projectID: string
+  clusterID: string
+  branchID: string
 }
 
 export class SqlUser {
