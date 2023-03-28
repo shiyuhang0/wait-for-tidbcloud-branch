@@ -6,7 +6,9 @@ import {sqluser} from './sqluser'
 async function run(): Promise<void> {
   try {
     const token = core.getInput('token', {required: true})
-    core.info(`context: ${JSON.stringify(context)}`)
+    if (context.payload.pull_request === undefined) {
+      throw new Error('This action only works on pull_request events now')
+    }
     const result = await poll({
       client: getOctokit(token),
       log: msg => core.info(msg),
@@ -14,7 +16,7 @@ async function run(): Promise<void> {
       checkName: 'TiDB Cloud Branch',
       owner: context.repo.owner,
       repo: context.repo.repo,
-      ref: core.getInput('ref') || context.sha,
+      ref: context.payload.pull_request.head.sha,
 
       timeoutSeconds: parseInt(core.getInput('timeoutSeconds')),
       intervalSeconds: parseInt(core.getInput('intervalSeconds'))
