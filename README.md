@@ -51,11 +51,12 @@ steps:
       publicKey: ${{ secrets.TIDB_CLOUD_API_PUBLIC_KEY }}
       privateKey: ${{ secrets.TIDB_CLOUD_API_PRIVATE_KEY }}
 
-  - name: Get mysql
-    uses: shogo82148/actions-setup-mysql@v1
-    
-  - name: Run test
-    run: mysql --connect-timeout 15 -u ${{steps.wait-for-branch.outputs.user}} -h ${{steps.wait-for-branch.outputs.host}} -P ${{steps.wait-for-branch.outputs.port}} -D test -p${{ steps.wait-for-branch.outputs.password }}
+  - name: Use the output
+     run: |
+        echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
+        echo "The user is ${{ steps.wait-for-branch.outputs.user }}"
+        echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
+        echo "The port is ${{ steps.wait-for-branch.outputs.port }}"   
 ```
 
 Here is an example of how to use this action for multiple jobs:
