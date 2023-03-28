@@ -6,6 +6,7 @@ import {sqluser} from './sqluser'
 async function run(): Promise<void> {
   try {
     const token = core.getInput('token', {required: true})
+    core.info(`context: ${JSON.stringify(context)}`)
     const result = await poll({
       client: getOctokit(token),
       log: msg => core.info(msg),
