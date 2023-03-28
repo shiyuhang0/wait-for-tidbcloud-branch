@@ -43,7 +43,6 @@ async function run(): Promise<void> {
     core.setOutput('host', sqlUser.host)
     core.setOutput('user', sqlUser.user)
     core.setOutput('password', sqlUser.password)
-
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

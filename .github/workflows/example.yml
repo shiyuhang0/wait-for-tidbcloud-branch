@@ -18,7 +18,7 @@ jobs:
           publicKey: "fake"
           privateKey: "fake"
       - name: Use the output
-          run: |
+        run: |
             echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
             echo "The user is ${{ steps.wait-for-branch.outputs.user }}"
             echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
