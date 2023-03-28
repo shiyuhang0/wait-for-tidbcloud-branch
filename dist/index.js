@@ -166,10 +166,10 @@ function sqluser(externalID, log) {
     return __awaiter(this, void 0, void 0, function* () {
         log(`Start to get Sql User with externalID ${externalID}`);
         const branchInfo = JSON.parse(externalID);
-        log(`branchInfo  ${externalID}`);
-        const projectID = branchInfo.projectID;
-        const clusterID = branchInfo.clusterID;
-        const branchID = branchInfo.branchID;
+        log(`branchInfo  ${branchInfo}`);
+        const projectID = branchInfo.project_id;
+        const clusterID = branchInfo.cluster_id;
+        const branchID = branchInfo.branch_id;
         log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`);
         // TODO get sql user from TiDB Cloud API
         return new SqlUser('fakehost', 4000, 'fakeuser', 'fakepassword');

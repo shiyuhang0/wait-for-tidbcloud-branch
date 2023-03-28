@@ -1,7 +1,7 @@
 interface BranchInfo {
-  projectID: string
-  clusterID: string
-  branchID: string
+  project_id: string
+  cluster_id: string
+  branch_id: number
 }
 
 export class SqlUser {
@@ -24,10 +24,10 @@ export async function sqluser(
 ): Promise<SqlUser> {
   log(`Start to get Sql User with externalID ${externalID}`)
   const branchInfo: BranchInfo = JSON.parse(externalID)
-  log(`branchInfo  ${externalID}`)
-  const projectID = branchInfo.projectID
-  const clusterID = branchInfo.clusterID
-  const branchID = branchInfo.branchID
+  log(`branchInfo  ${branchInfo}`)
+  const projectID = branchInfo.project_id
+  const clusterID = branchInfo.cluster_id
+  const branchID = branchInfo.branch_id
   log(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
