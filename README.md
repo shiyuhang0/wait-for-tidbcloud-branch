@@ -1,105 +1,103 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# wait-for-tidbcloud-branch
 
-# Create a JavaScript Action using TypeScript
+A JavaScript action that works with [TiDB Cloud App](https://github.com/apps/tidb-cloud). It allows you to:
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+- Wait for TiDB Cloud Branch check which created by TiDB Cloud App to complete.
+- Generate a SQL user for this TiDB Cloud branch.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+## Usage
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
 ```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
-
-```yaml
-uses: ./
+uses: shiyuhang0/wait-for-tidbcloud-branch@v0
 with:
-  milliseconds: 1000
+  token: ${{ secrets.GITHUB_TOKEN }}
+  publicKey: ${{ secrets.TIDB_CLOUD_API_PUBLIC_KEY }}
+  privateKey: ${{ secrets.TIDB_CLOUD_API_PRIVATE_KEY }}
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+## Inputs
 
-## Usage:
+The action supports the following inputs:
+- token - (required) The GitHub token to use for making API requests. Typically, this would be set to ${{ secrets.GITHUB_TOKEN }}.
+- publicKey - (required) The public key of TiDB Cloud api. Generate it from [TiDB Cloud](https://tidbcloud.com/).
+- privateKey - (required) The private key of TiDB Cloud api. Generate it from [TiDB Cloud](https://tidbcloud.com/).
+- intervalSeconds - (optional) The interval seconds to check the status of TiDB Cloud Branch check. Default is 10.
+- timeoutSeconds - (optional) The timeout seconds to wait for TiDB Cloud Branch check. Default is 300.
+- addMask - (optional) Whether to add mask for the password output. Default is true.
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+## Outputs
+
+The action provide the following outputs:
+
+- host - The host of the TiDB Cloud branch.
+- user - The user of the TiDB Cloud branch.
+- password - The password of the TiDB Cloud branch.
+- port - The port of the TiDB Cloud branch.
+
+## Best practices
+
+Set TiDB Cloud API publicKey and privateKey in your action secrets, and use them in your workflow.
+
+Here is an example of how to use this action in a single job:
+
+```
+steps:
+  - name: Wait for TiDB Cloud branch ready
+    uses: shiyuhang0/wait-for-tidbcloud-branch@v0
+    id: wait-for-branch
+    with:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      publicKey: ${{ secrets.TIDB_CLOUD_API_PUBLIC_KEY }}
+      privateKey: ${{ secrets.TIDB_CLOUD_API_PRIVATE_KEY }}
+
+  - name: Use the output
+     run: |
+        echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
+        echo "The user is ${{ steps.wait-for-branch.outputs.user }}"
+        echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
+```
+
+Here is an example of how to use this action for multiple jobs. 
+
+> You must set addMask to false if you want to use the password in other jobs. Because GitHub action does not support sharing secrets between jobs now. See [this discussion](https://github.com/orgs/community/discussions/13082) for more details.
+
+
+```
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shiyuhang0/wait-for-tidbcloud-branch@v0
+        id: wait-for-branch
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          publicKey: ${{ secrets.TIDB_CLOUD_API_PUBLIC_KEY }}
+          privateKey: ${{ secrets.TIDB_CLOUD_API_PRIVATE_KEY }}
+          addMask: false
+    outputs:
+      user: ${{ steps.wait-for-branch.outputs.user }}
+      host: ${{ steps.wait-for-branch.outputs.host }}
+      password: ${{ steps.wait-for-branch.outputs.password }}
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use the output
+        run: |
+          echo "The host is ${{ needs.setup.outputs.host }}"
+          echo "The user is ${{ needs.setup.outputs.user }}"
+          echo "The password is ${{ needs.setup.outputs.password }}"       
+```
+
+
+## License
+
+See [LICENSE](LICENSE).
+
+## Dev Guide
+
+See [docs/dev_guide.md](docs/dev_guide.md) for more details.
+
+
