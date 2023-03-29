@@ -32,7 +32,6 @@ The action provide the following outputs:
 - host - The host of the TiDB Cloud branch.
 - user - The user of the TiDB Cloud branch.
 - password - The password of the TiDB Cloud branch.
-- port - The port of the TiDB Cloud branch.
 
 ## Best practices
 
