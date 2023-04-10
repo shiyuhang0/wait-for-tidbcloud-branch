@@ -56,6 +56,7 @@ export async function sqluser(
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 async function fetchData(
   log: (message: string) => void,
   url: string,
@@ -97,10 +98,8 @@ async function fetchData(
   }
 
   const resp = await fetch(`https://api.dev.tidbcloud.com${url}`, options)
+  // eslint-disable-next-line no-console
+  console.log(resp)
   log(`Got response ${resp}`)
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const data = await resp.json()
-  log(`Got data ${data}`)
-  return data
+  return resp
 }
