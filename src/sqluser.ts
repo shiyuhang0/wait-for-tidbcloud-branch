@@ -3,10 +3,6 @@
 // // @ts-ignore
 // import * as DigestFetch from 'digest-fetch'
 
-// eslint-disable-next-line import/named
-import fetch, {RequestInit} from 'node-fetch'
-import crypto from 'crypto'
-
 interface BranchInfo {
   project_id: string
   cluster_id: string
@@ -50,57 +46,31 @@ export async function sqluser(
   const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
   log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
-  const resp = fetchData(log, url, publicKey, privateKey)
+  //const resp = fetchData(log, url, publicKey, privateKey)
 
-  log(`Got response ${resp}`)
+  // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
+  const exec = require('@actions/exec')
+
+  let myOutput = ''
+  let myError = ''
+
+  const options = {
+    listeners: {
+      stdout: (data: Buffer) => {
+        myOutput += data.toString()
+      },
+      stderr: (data: Buffer) => {
+        myError += data.toString()
+      }
+    }
+  }
+
+  await exec.exec(
+    "curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches",
+    options
+  )
+
+  log(`stdout: ${myOutput},error: ${myError}`)
 
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
-}
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-async function fetchData(
-  log: (message: string) => void,
-  url: string,
-  publicKey: string,
-  privateKey: string
-) {
-  const nonce = crypto.randomBytes(8).toString('hex').slice(0, 16)
-  const date = new Date().toUTCString().replace('GMT', 'UTC')
-
-  const ha1 = crypto
-    .createHash('md5')
-    .update(`${publicKey}:MyRealm:${privateKey}`)
-    .digest('hex')
-
-  const ha2 = crypto.createHash('md5').update(`GET:${url}`).digest('hex')
-
-  const nc = '00000001'
-  const cnonce = crypto.randomBytes(8).toString('hex')
-
-  const response = crypto
-    .createHash('md5')
-    .update(`${ha1}:${nonce}:${nc}:${cnonce}:auth:${ha2}`)
-    .digest('hex')
-
-  const authHeader = `Digest username="${publicKey}", realm="MyRealm", nonce="${nonce}", uri="${url}", qop=auth, nc="${nc}", cnonce="${cnonce}", response="${response}", opaque=""`
-
-  const headers = {
-    Authorization: authHeader,
-    Date: date,
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'en-US,en;q=0.5',
-    Connection: 'keep-alive',
-    'Cache-Control': 'no-cache',
-    Pragma: 'no-cache'
-  }
-
-  const options: RequestInit = {
-    headers
-  }
-
-  const resp = await fetch(`https://api.dev.tidbcloud.com${url}`, options)
-  // eslint-disable-next-line no-console
-  console.log(resp)
-  log(`Got response ${resp}`)
-  return resp
 }
