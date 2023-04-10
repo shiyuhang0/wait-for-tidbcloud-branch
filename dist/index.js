@@ -203,6 +203,7 @@ function sqluser(externalID, log, publicKey, privateKey) {
     });
 }
 exports.sqluser = sqluser;
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function fetchData(log, url, publicKey, privateKey) {
     return __awaiter(this, void 0, void 0, function* () {
         const nonce = crypto_1.default.randomBytes(8).toString('hex').slice(0, 16);
@@ -232,12 +233,10 @@ function fetchData(log, url, publicKey, privateKey) {
             headers
         };
         const resp = yield (0, node_fetch_1.default)(`https://api.dev.tidbcloud.com${url}`, options);
+        // eslint-disable-next-line no-console
+        console.log(resp);
         log(`Got response ${resp}`);
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const data = yield resp.json();
-        log(`Got data ${data}`);
-        return data;
+        return resp;
     });
 }
 
