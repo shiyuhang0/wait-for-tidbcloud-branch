@@ -1,8 +1,3 @@
-// import 'isomorphic-fetch'
-// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// // @ts-ignore
-// import * as DigestFetch from 'digest-fetch'
-
 interface BranchInfo {
   project_id: string
   cluster_id: string
@@ -43,7 +38,7 @@ export async function sqluser(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
   // TODO get sql user from TiDB Cloud API
-  const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
+  // const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
   log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
   //const resp = fetchData(log, url, publicKey, privateKey)
