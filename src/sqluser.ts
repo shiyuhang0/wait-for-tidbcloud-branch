@@ -1,3 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import * as DigestFetch from 'digest-fetch'
+
 interface BranchInfo {
   project_id: string
   cluster_id: string
@@ -18,7 +22,9 @@ export class SqlUser {
 
 export async function sqluser(
   externalID: string,
-  log: (message: string) => void
+  log: (message: string) => void,
+  publicKey: string,
+  privateKey: string
 ): Promise<SqlUser> {
   log(`Start to get Sql User with externalID ${externalID}`)
   const branchInfo: BranchInfo = JSON.parse(externalID)
@@ -36,5 +42,12 @@ export async function sqluser(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
   // TODO get sql user from TiDB Cloud API
+  const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
+
+  const client = new DigestFetch(publicKey, privateKey)
+  const resp = await client.fetch(url, {})
+
+  log(`Got response ${resp}`)
+
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
 }
