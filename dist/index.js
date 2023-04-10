@@ -203,7 +203,7 @@ function sqluser(externalID, log, publicKey, privateKey) {
                 }
             }
         };
-        yield exec.exec("curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches", options);
+        yield exec.exec("curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches", [], options);
         log(`stdout: ${myOutput},error: ${myError}`);
         return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });

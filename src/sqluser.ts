@@ -62,6 +62,7 @@ export async function sqluser(
 
   await exec.exec(
     "curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches",
+    [],
     options
   )
 
