@@ -16,7 +16,7 @@ inputs:
     default: '10'
   publicKey:
     description: 'The public key of TiDB Cloud API.'
-  privetKey:
+  privateKey:
     description: 'The private key of TiDB Cloud API.'
   addMask:
     description: 'Whether to add mask for the output.'

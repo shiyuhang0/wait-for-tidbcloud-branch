@@ -44,8 +44,7 @@ export async function sqluser(
   // TODO get sql user from TiDB Cloud API
   const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
-  const client = new DigestFetch(publicKey, privateKey)
-  const resp = await client.fetch(url, {})
+  const resp = DigestFetch(url, publicKey, privateKey, {})
 
   log(`Got response ${resp}`)
 

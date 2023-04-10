@@ -209,8 +209,7 @@ function sqluser(externalID, log, publicKey, privateKey) {
         log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`);
         // TODO get sql user from TiDB Cloud API
         const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`;
-        const client = new DigestFetch(publicKey, privateKey);
-        const resp = yield client.fetch(url, {});
+        const resp = DigestFetch(url, publicKey, privateKey, {});
         log(`Got response ${resp}`);
         return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });
