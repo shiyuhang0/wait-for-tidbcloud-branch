@@ -1,6 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import * as DigestFetch from 'digest-fetch'
+// import 'isomorphic-fetch'
+// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// // @ts-ignore
+// import * as DigestFetch from 'digest-fetch'
+
+// eslint-disable-next-line import/named
+import fetch, {RequestInit} from 'node-fetch'
+import crypto from 'crypto'
 
 interface BranchInfo {
   project_id: string
@@ -42,11 +47,60 @@ export async function sqluser(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
   // TODO get sql user from TiDB Cloud API
-  const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
+  const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
-  const resp = DigestFetch(url, publicKey, privateKey, {})
+  const resp = fetchData(log, url, publicKey, privateKey)
 
   log(`Got response ${resp}`)
 
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
+}
+
+async function fetchData(
+  log: (message: string) => void,
+  url: string,
+  publicKey: string,
+  privateKey: string
+) {
+  const nonce = crypto.randomBytes(8).toString('hex').slice(0, 16)
+  const date = new Date().toUTCString().replace('GMT', 'UTC')
+
+  const ha1 = crypto
+    .createHash('md5')
+    .update(`${publicKey}:MyRealm:${privateKey}`)
+    .digest('hex')
+
+  const ha2 = crypto.createHash('md5').update(`GET:${url}`).digest('hex')
+
+  const nc = '00000001'
+  const cnonce = crypto.randomBytes(8).toString('hex')
+
+  const response = crypto
+    .createHash('md5')
+    .update(`${ha1}:${nonce}:${nc}:${cnonce}:auth:${ha2}`)
+    .digest('hex')
+
+  const authHeader = `Digest username="${publicKey}", realm="MyRealm", nonce="${nonce}", uri="${url}", qop=auth, nc="${nc}", cnonce="${cnonce}", response="${response}", opaque=""`
+
+  const headers = {
+    Authorization: authHeader,
+    Date: date,
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Accept-Language': 'en-US,en;q=0.5',
+    Connection: 'keep-alive',
+    'Cache-Control': 'no-cache',
+    Pragma: 'no-cache'
+  }
+
+  const options: RequestInit = {
+    headers
+  }
+
+  const resp = await fetch(`https://api.dev.tidbcloud.com${url}`, options)
+  log(`Got response ${resp}`)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const data = await resp.json()
+  log(`Got data ${data}`)
+  return data
 }
