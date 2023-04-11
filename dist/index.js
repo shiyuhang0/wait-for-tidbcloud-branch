@@ -181,13 +181,17 @@ function sqluser(externalID, log, publicKey, privateKey) {
             throw new Error('Invalid externalID from TiDB Cloud Branch check');
         }
         log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`);
-        // TODO get sql user from TiDB Cloud API
         const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`;
         log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`);
         const client = new digest_fetch_1.default(publicKey, privateKey);
-        const resp = yield client.fetch(url, {});
-        // eslint-disable-next-line no-console
-        console.log(resp);
+        yield client
+            .fetch(url)
+            // eslint-disable-next-line github/no-then
+            .then(resp => resp.json())
+            // eslint-disable-next-line github/no-then,no-console
+            .then(data => console.log(data))
+            // eslint-disable-next-line github/no-then,no-console
+            .catch(e => console.error(e));
         return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });
 }
