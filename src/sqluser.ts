@@ -38,19 +38,19 @@ export async function sqluser(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
   // TODO get sql user from TiDB Cloud API
-  // const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
-  //
-  // log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
+  const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
-  // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
-  // const DigestFetch = require('digest-fetch')
-  // const client = new DigestFetch(publicKey, privateKey)
-  // await client
-  //   .fetch(url, {})
-  //   // eslint-disable-next-line github/no-then,no-console
-  //   .then((res: never) => console.log(res))
-  //   // eslint-disable-next-line github/no-then,no-console
-  //   .catch((err: never) => console.log(err))
+  log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`)
+
+  // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
+  const DigestFetch = require('digest-fetch')
+  const client = new DigestFetch(publicKey, privateKey)
+  await client
+    .fetch(url, {})
+    // eslint-disable-next-line github/no-then,no-console
+    .then((res: never) => console.log(res))
+    // eslint-disable-next-line github/no-then,no-console
+    .catch((err: never) => console.log(err))
 
   // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
   // const exec = require('@actions/exec')
