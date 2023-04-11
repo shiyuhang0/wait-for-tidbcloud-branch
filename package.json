@@ -4,7 +4,6 @@
   "private": true,
   "description": "Wait for TiDBCloud branch to be ready. Only used on pull request",
   "main": "lib/main.js",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
