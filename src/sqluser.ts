@@ -46,6 +46,7 @@ export async function sqluser(
   const client = new DigestFetch(publicKey, privateKey)
   const resp = await client.fetch(url)
   // eslint-disable-next-line no-console
-  console.log(resp.json)
+  console.log(resp.data)
+
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
 }

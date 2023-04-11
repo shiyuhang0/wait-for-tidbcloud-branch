@@ -15,8 +15,8 @@ jobs:
         id: wait-for-branch
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          publicKey: SpOBpok4
-          privateKey: a2e82f10-accf-477e-9fcf-14776869be0d
+          publicKey: ${{ secrets.TIDB_CLOUD_PUBLIC_KEY }}
+          privateKey: ${{ secrets.TIDB_CLOUD_PRIVATE_KEY }}
           addMask: false
       - name: Use the output
         run: |
