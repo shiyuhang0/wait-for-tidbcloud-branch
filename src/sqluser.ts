@@ -44,14 +44,8 @@ export async function sqluser(
   log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`)
 
   const client = new DigestFetch(publicKey, privateKey)
-  await client
-    .fetch(url)
-    // eslint-disable-next-line github/no-then
-    .then(resp => resp.json())
-    // eslint-disable-next-line github/no-then,no-console
-    .then(data => console.log(data))
-    // eslint-disable-next-line github/no-then,no-console
-    .catch(e => console.error(e))
-
+  const resp = await client.fetch(url)
+  // eslint-disable-next-line no-console
+  console.log(resp.json)
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
 }
