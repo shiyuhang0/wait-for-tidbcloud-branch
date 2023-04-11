@@ -1,3 +1,5 @@
+import DigestClient from '../node_modules/digest-fetch'
+
 interface BranchInfo {
   project_id: string
   cluster_id: string
@@ -42,16 +44,9 @@ export async function sqluser(
 
   log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
-  const DigestFetch = require('../node_modules/digest-fetch')
-  const client = new DigestFetch(publicKey, privateKey)
-  const options = {}
-  client
-    .fetch(url, options)
-    // eslint-disable-next-line github/no-then
-    .then((resp: {json: () => never}) => resp.json())
-    // eslint-disable-next-line github/no-then,no-console
-    .then((data: never) => console.log(data))
+  const resp = await new DigestClient(publicKey, privateKey).fetch(url)
+  // eslint-disable-next-line no-console
+  console.log(resp)
 
   // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
   // const exec = require('@actions/exec')

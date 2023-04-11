@@ -162,8 +162,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sqluser = exports.SqlUser = void 0;
+const digest_fetch_1 = __importDefault(__nccwpck_require__(2461));
 class SqlUser {
     constructor(host, user, password) {
         this.host = host;
@@ -188,16 +192,9 @@ function sqluser(externalID, log, publicKey, privateKey) {
         // TODO get sql user from TiDB Cloud API
         const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`;
         log(`publicKey: ${publicKey},privateKey: ${privateKey}`);
-        // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
-        const DigestFetch = __nccwpck_require__(2461);
-        const client = new DigestFetch(publicKey, privateKey);
-        const options = {};
-        client
-            .fetch(url, options)
-            // eslint-disable-next-line github/no-then
-            .then((resp) => resp.json())
-            // eslint-disable-next-line github/no-then,no-console
-            .then((data) => console.log(data));
+        const resp = yield new digest_fetch_1.default(publicKey, privateKey).fetch(url);
+        // eslint-disable-next-line no-console
+        console.log(resp);
         // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
         // const exec = require('@actions/exec')
         //
