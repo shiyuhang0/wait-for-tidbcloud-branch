@@ -1,5 +1,3 @@
-import DigestClient from '../node_modules/digest-fetch'
-
 interface BranchInfo {
   project_id: string
   cluster_id: string
@@ -40,14 +38,19 @@ export async function sqluser(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
   // TODO get sql user from TiDB Cloud API
-  const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
+  // const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
+  //
+  // log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
 
-  log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
-
-  const client = new DigestClient(publicKey, privateKey)
-  const resp = client.fetch(url)
-  // eslint-disable-next-line no-console
-  console.log(resp)
+  // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
+  // const DigestFetch = require('digest-fetch')
+  // const client = new DigestFetch(publicKey, privateKey)
+  // await client
+  //   .fetch(url, {})
+  //   // eslint-disable-next-line github/no-then,no-console
+  //   .then((res: never) => console.log(res))
+  //   // eslint-disable-next-line github/no-then,no-console
+  //   .catch((err: never) => console.log(err))
 
   // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
   // const exec = require('@actions/exec')

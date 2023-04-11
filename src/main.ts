@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import {context, getOctokit} from '@actions/github'
 import {poll} from './poll'
 import {sqluser} from './sqluser'
+import DigestClient from 'digest-fetch'
 
 async function run(): Promise<void> {
   try {
@@ -33,6 +34,14 @@ async function run(): Promise<void> {
       throw new Error('externalID is empty with success conclusion')
     }
 
+    const client = new DigestClient(
+      core.getInput('publicKey'),
+      core.getInput('privateKey')
+    )
+    const url = `/api/internal/projects/163469/clusters/2939253/branches`
+    const resp = client.fetch(url)
+    // eslint-disable-next-line no-console
+    console.log(resp)
     const sqlUser = await sqluser(
       result.externalID,
       msg => core.info(msg),
