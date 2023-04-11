@@ -184,14 +184,9 @@ function sqluser(externalID, log, publicKey, privateKey) {
         const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`;
         log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`);
         const client = new digest_fetch_1.default(publicKey, privateKey);
-        yield client
-            .fetch(url)
-            // eslint-disable-next-line github/no-then
-            .then(resp => resp.json())
-            // eslint-disable-next-line github/no-then,no-console
-            .then(data => console.log(data))
-            // eslint-disable-next-line github/no-then,no-console
-            .catch(e => console.error(e));
+        const resp = yield client.fetch(url);
+        // eslint-disable-next-line no-console
+        console.log(resp.json);
         return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });
 }
