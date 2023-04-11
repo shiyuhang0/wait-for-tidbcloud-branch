@@ -44,7 +44,8 @@ export async function sqluser(
 
   log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
 
-  const resp = await new DigestClient(publicKey, privateKey).fetch(url)
+  const client = new DigestClient(publicKey, privateKey)
+  const resp = client.fetch(url)
   // eslint-disable-next-line no-console
   console.log(resp)
 
