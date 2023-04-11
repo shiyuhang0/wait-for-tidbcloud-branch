@@ -1,3 +1,5 @@
+import DigestFetch from '../node_modules/digest-fetch'
+
 interface BranchInfo {
   project_id: string
   cluster_id: string
@@ -38,35 +40,39 @@ export async function sqluser(
     `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
   )
   // TODO get sql user from TiDB Cloud API
-  // const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
+  const url = `/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
   log(`publicKey: ${publicKey},privateKey: ${privateKey}`)
-  //const resp = fetchData(log, url, publicKey, privateKey)
 
-  // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
-  const exec = require('@actions/exec')
+  const client = new DigestFetch(publicKey, privateKey)
+  const resp = await client.fetch(url)
+  // eslint-disable-next-line no-console
+  console.log(resp)
 
-  let myOutput = ''
-  let myError = ''
-
-  const options = {
-    listeners: {
-      stdout: (data: Buffer) => {
-        myOutput += data.toString()
-      },
-      stderr: (data: Buffer) => {
-        myError += data.toString()
-      }
-    }
-  }
-
-  await exec.exec(
-    "curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches",
-    [],
-    options
-  )
-
-  log(`stdout: ${myOutput},error: ${myError}`)
+  // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
+  // const exec = require('@actions/exec')
+  //
+  // let myOutput = ''
+  // let myError = ''
+  //
+  // const options = {
+  //   listeners: {
+  //     stdout: (data: Buffer) => {
+  //       myOutput += data.toString()
+  //     },
+  //     stderr: (data: Buffer) => {
+  //       myError += data.toString()
+  //     }
+  //   }
+  // }
+  //
+  // await exec.exec(
+  //   "curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches",
+  //   [],
+  //   options
+  // )
+  //
+  // log(`stdout: ${myOutput},error: ${myError}`)
 
   return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
 }
