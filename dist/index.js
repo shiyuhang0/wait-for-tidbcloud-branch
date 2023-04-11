@@ -188,30 +188,6 @@ function sqluser(externalID, log, publicKey, privateKey) {
         const resp = yield client.fetch(url, {});
         // eslint-disable-next-line no-console
         console.log(resp);
-        // // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
-        // const exec = require('@actions/exec')
-        //
-        // let myOutput = ''
-        // let myError = ''
-        //
-        // const options = {
-        //   listeners: {
-        //     stdout: (data: Buffer) => {
-        //       myOutput += data.toString()
-        //     },
-        //     stderr: (data: Buffer) => {
-        //       myError += data.toString()
-        //     }
-        //   }
-        // }
-        //
-        // await exec.exec(
-        //   "curl --digest --user 'SpOBpok4:a2e82f10-accf-477e-9fcf-14776869be0d' --request GET --url https://api.dev.tidbcloud.com/api/internal/projects/163469/clusters/2939253/branches",
-        //   [],
-        //   options
-        // )
-        //
-        // log(`stdout: ${myOutput},error: ${myError}`)
         return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });
 }
