@@ -190,7 +190,8 @@ function sqluser(externalID, log, publicKey, privateKey) {
         try {
             const resp = yield client.fetch(url);
             const data = yield resp.json();
-            sqlUser = JSON.parse(data);
+            sqlUser = JSON.parse(JSON.stringify(data));
+            log(`get sqlUser`);
         }
         catch (error) {
             throw error;

@@ -52,7 +52,8 @@ export async function sqluser(
   try {
     const resp = await client.fetch(url)
     const data = await resp.json()
-    sqlUser = JSON.parse(data)
+    sqlUser = JSON.parse(JSON.stringify(data))
+    log(`get sqlUser`)
   } catch (error) {
     throw error
   }
