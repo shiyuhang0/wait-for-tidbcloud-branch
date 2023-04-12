@@ -48,18 +48,15 @@ export async function sqluser(
   const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`
 
   const client = new DigestFetch(publicKey, privateKey)
-  let sqlUser: SqlUser = new SqlUser('', '', '')
   try {
     const resp = await client.fetch(url, {method: 'post'})
     const data = await resp.json()
-    sqlUser = JSON.parse(JSON.stringify(data))
-    log(`get sqlUser`)
+    log(data['username'])
+    const sqlUser: SqlUser = JSON.parse(JSON.stringify(data))
+    log(`get sqlUser: ${sqlUser}`)
+    log(`get sqlUser: ${JSON.stringify(sqlUser)}`)
+    return sqlUser
   } catch (error) {
     throw error
   }
-
-  log(`get sqlUser: ${sqlUser}`)
-  log(`get sqlUser: ${JSON.stringify(sqlUser)}`)
-
-  return sqlUser
 }

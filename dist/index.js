@@ -72,7 +72,7 @@ function run() {
                 core.setSecret(sqlUser.password);
             }
             core.setOutput('host', sqlUser.host);
-            core.setOutput('user', sqlUser.user);
+            core.setOutput('username', sqlUser.username);
             core.setOutput('password', sqlUser.password);
         }
         catch (error) {
@@ -163,7 +163,7 @@ const digest_fetch_1 = __importDefault(__nccwpck_require__(2461));
 class SqlUser {
     constructor(host, user, password) {
         this.host = host;
-        this.user = user;
+        this.username = user;
         this.password = password;
     }
 }
@@ -186,19 +186,18 @@ function sqluser(externalID, log, publicKey, privateKey) {
         log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID}, branchID ${branchID} and branchName ${branchName}`);
         const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`;
         const client = new digest_fetch_1.default(publicKey, privateKey);
-        let sqlUser = new SqlUser('', '', '');
         try {
-            const resp = yield client.fetch(url);
+            const resp = yield client.fetch(url, { method: 'post' });
             const data = yield resp.json();
-            sqlUser = JSON.parse(JSON.stringify(data));
-            log(`get sqlUser`);
+            log(data['username']);
+            const sqlUser = JSON.parse(JSON.stringify(data));
+            log(`get sqlUser: ${sqlUser}`);
+            log(`get sqlUser: ${JSON.stringify(sqlUser)}`);
+            return sqlUser;
         }
         catch (error) {
             throw error;
         }
-        log(`get sqlUser: ${sqlUser}`);
-        log(`get sqlUser: ${JSON.stringify(sqlUser)}`);
-        return sqlUser;
     });
 }
 exports.sqluser = sqluser;
