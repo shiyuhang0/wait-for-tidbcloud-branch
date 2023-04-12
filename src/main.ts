@@ -33,13 +33,22 @@ async function run(): Promise<void> {
       throw new Error('externalID is empty with success conclusion')
     }
 
-    const sqlUser = await sqluser(result.externalID, msg => core.info(msg))
+    const sqlUser = await sqluser(
+      result.externalID,
+      msg => core.info(msg),
+      core.getInput('publicKey'),
+      core.getInput('privateKey'),
+      core.getInput('env')
+    )
     if (core.getInput('addMask') === 'true') {
       core.info('addMask is true, set secret for sql user password')
       core.setSecret(sqlUser.password)
     }
+    core.info(
+      `Got sql user. host: ${sqlUser.host}, username: ${sqlUser.username}, password: ${sqlUser.password}`
+    )
     core.setOutput('host', sqlUser.host)
-    core.setOutput('user', sqlUser.user)
+    core.setOutput('username', sqlUser.username)
     core.setOutput('password', sqlUser.password)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)

@@ -15,16 +15,17 @@ jobs:
         id: wait-for-branch
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          publicKey: "fake"
-          privateKey: "fake"
+          publicKey: ${{ secrets.TIDB_CLOUD_PUBLIC_KEY }}
+          privateKey: ${{ secrets.TIDB_CLOUD_PRIVATE_KEY }}
           addMask: false
+          env: dev
       - name: Use the output
         run: |
             echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
-            echo "The user is ${{ steps.wait-for-branch.outputs.user }}"
+            echo "The username is ${{ steps.wait-for-branch.outputs.username }}"
             echo "The password is ${{ steps.wait-for-branch.outputs.password }}"
     outputs:
-      user: ${{ steps.wait-for-branch.outputs.user }}
+      username: ${{ steps.wait-for-branch.outputs.username }}
       host: ${{ steps.wait-for-branch.outputs.host }}
       password: ${{ steps.wait-for-branch.outputs.password }}
 
@@ -35,5 +36,5 @@ jobs:
       - name: Use the output
         run: |
           echo "The host is ${{ needs.setup.outputs.host }}"
-          echo "The user is ${{ needs.setup.outputs.user }}"
+          echo "The username is ${{ needs.setup.outputs.username }}"
           echo "The password is ${{ needs.setup.outputs.password }}"
