@@ -168,6 +168,7 @@ class SqlUser {
     }
 }
 exports.SqlUser = SqlUser;
+const host = 'https://api.dev.tidbcloud.com';
 function sqluser(externalID, log, publicKey, privateKey) {
     return __awaiter(this, void 0, void 0, function* () {
         log(`Start to get Sql User with externalID ${externalID}`);
@@ -175,34 +176,28 @@ function sqluser(externalID, log, publicKey, privateKey) {
         const projectID = branchInfo.project_id;
         const clusterID = branchInfo.cluster_id;
         const branchID = branchInfo.branch_id;
+        const branchName = branchInfo.branch_name;
         if (projectID === undefined ||
             clusterID === undefined ||
-            branchID === undefined) {
+            branchID === undefined ||
+            branchName === undefined) {
             throw new Error('Invalid externalID from TiDB Cloud Branch check');
         }
-        log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`);
-        const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`;
-        log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`);
+        log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID}, branchID ${branchID} and branchName ${branchName}`);
+        const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`;
         const client = new digest_fetch_1.default(publicKey, privateKey);
+        let sqlUser = new SqlUser('', '', '');
         try {
             const resp = yield client.fetch(url);
             const data = yield resp.json();
-            // eslint-disable-next-line no-console
-            console.log(data);
+            sqlUser = JSON.parse(data);
         }
         catch (error) {
-            log('error occurs when fetching data from tidb cloud');
+            throw error;
         }
-        log('start then');
-        client
-            .fetch(url)
-            // eslint-disable-next-line github/no-then
-            .then(resp => resp.json())
-            // eslint-disable-next-line github/no-then,no-console
-            .then(data => console.log(data))
-            // eslint-disable-next-line github/no-then,no-console
-            .catch(e => console.error(e));
-        return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
+        log(`get sqlUser: ${sqlUser}`);
+        log(`get sqlUser: ${JSON.stringify(sqlUser)}`);
+        return sqlUser;
     });
 }
 exports.sqluser = sqluser;

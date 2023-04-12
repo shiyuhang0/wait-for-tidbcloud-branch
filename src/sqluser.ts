@@ -4,6 +4,7 @@ interface BranchInfo {
   project_id: string
   cluster_id: string
   branch_id: string
+  branch_name: string
 }
 
 export class SqlUser {
@@ -18,6 +19,8 @@ export class SqlUser {
   }
 }
 
+const host = 'https://api.dev.tidbcloud.com'
+
 export async function sqluser(
   externalID: string,
   log: (message: string) => void,
@@ -29,40 +32,33 @@ export async function sqluser(
   const projectID = branchInfo.project_id
   const clusterID = branchInfo.cluster_id
   const branchID = branchInfo.branch_id
+  const branchName = branchInfo.branch_name
   if (
     projectID === undefined ||
     clusterID === undefined ||
-    branchID === undefined
+    branchID === undefined ||
+    branchName === undefined
   ) {
     throw new Error('Invalid externalID from TiDB Cloud Branch check')
   }
   log(
-    `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID} and branchID ${branchID}`
+    `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID}, branchID ${branchID} and branchName ${branchName}`
   )
-  const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`
 
-  log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`)
+  const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`
 
   const client = new DigestFetch(publicKey, privateKey)
+  let sqlUser: SqlUser = new SqlUser('', '', '')
   try {
     const resp = await client.fetch(url)
     const data = await resp.json()
-    // eslint-disable-next-line no-console
-    console.log(data)
+    sqlUser = JSON.parse(data)
   } catch (error) {
-    log('error occurs when fetching data from tidb cloud')
+    throw error
   }
 
-  log('start then')
+  log(`get sqlUser: ${sqlUser}`)
+  log(`get sqlUser: ${JSON.stringify(sqlUser)}`)
 
-  client
-    .fetch(url)
-    // eslint-disable-next-line github/no-then
-    .then(resp => resp.json())
-    // eslint-disable-next-line github/no-then,no-console
-    .then(data => console.log(data))
-    // eslint-disable-next-line github/no-then,no-console
-    .catch(e => console.error(e))
-
-  return new SqlUser('fakehost', 'fakeuser', 'fakepassword')
+  return sqlUser
 }
