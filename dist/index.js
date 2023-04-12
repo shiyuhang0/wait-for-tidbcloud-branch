@@ -184,15 +184,19 @@ function sqluser(externalID, log, publicKey, privateKey) {
         const url = `https://api.dev.tidbcloud.com/api/internal/projects/${projectID}/clusters/${clusterID}/branches`;
         log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`);
         const client = new digest_fetch_1.default(publicKey, privateKey);
-        const resp = yield client.fetch(url);
-        const data1 = resp.json();
-        // eslint-disable-next-line no-console
-        console.log(resp);
-        // eslint-disable-next-line no-console
-        console.log(data1);
+        try {
+            const resp = yield client.fetch(url);
+            const data = yield resp.json();
+            // eslint-disable-next-line no-console
+            console.log(data);
+        }
+        catch (error) {
+            log('error occurs when fetching data from tidb cloud');
+        }
+        log('start then');
         client
             .fetch(url)
-            // eslint-disable-next-line github/no-then,no-shadow
+            // eslint-disable-next-line github/no-then
             .then(resp => resp.json())
             // eslint-disable-next-line github/no-then,no-console
             .then(data => console.log(data))
