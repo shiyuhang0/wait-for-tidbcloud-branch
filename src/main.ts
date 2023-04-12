@@ -43,6 +43,9 @@ async function run(): Promise<void> {
       core.info('addMask is true, set secret for sql user password')
       core.setSecret(sqlUser.password)
     }
+    core.info(
+      `Got sql user. host: ${sqlUser.host}, username: ${sqlUser.username}, password: ${sqlUser.password}`
+    )
     core.setOutput('host', sqlUser.host)
     core.setOutput('username', sqlUser.username)
     core.setOutput('password', sqlUser.password)

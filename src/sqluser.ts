@@ -43,7 +43,6 @@ export async function sqluser(
   }
 
   const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`
-
   log(`request url to get sql user: ${url}`)
 
   const client = new DigestFetch(publicKey, privateKey)
