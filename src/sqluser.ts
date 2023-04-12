@@ -49,7 +49,7 @@ export async function sqluser(
     host = 'https://api.staging.tidbcloud.com'
   }
 
-  const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`
+  const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/${branchName}/users`
   log(`request url to get sql user: ${url}`)
 
   const client = new DigestFetch(publicKey, privateKey)
