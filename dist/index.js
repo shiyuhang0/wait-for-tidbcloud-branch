@@ -190,8 +190,10 @@ function sqluser(externalID, log, publicKey, privateKey) {
         try {
             const resp = yield client.fetch(url, { method: 'POST' });
             const data = yield resp.json();
-            log(data['username']);
-            const sqlUser = JSON.parse(JSON.stringify(data));
+            if (data['username'] === undefined || data['password'] === undefined) {
+                throw new Error(`Can not get sql user with response: ${JSON.stringify(data)}`);
+            }
+            const sqlUser = new SqlUser('', data['username'], data['password']);
             log(`get sqlUser: ${sqlUser}`);
             log(`get sqlUser: ${JSON.stringify(sqlUser)}`);
             return sqlUser;

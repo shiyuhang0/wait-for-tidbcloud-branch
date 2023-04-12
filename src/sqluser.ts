@@ -52,8 +52,12 @@ export async function sqluser(
   try {
     const resp = await client.fetch(url, {method: 'POST'})
     const data = await resp.json()
-    log(data['username'])
-    const sqlUser: SqlUser = JSON.parse(JSON.stringify(data))
+    if (data['username'] === undefined || data['password'] === undefined) {
+      throw new Error(
+        `Can not get sql user with response: ${JSON.stringify(data)}`
+      )
+    }
+    const sqlUser: SqlUser = new SqlUser('', data['username'], data['password'])
     log(`get sqlUser: ${sqlUser}`)
     log(`get sqlUser: ${JSON.stringify(sqlUser)}`)
     return sqlUser
