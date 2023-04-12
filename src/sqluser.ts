@@ -47,9 +47,10 @@ export async function sqluser(
 
   const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`
 
+  log(`request url: ${url}`)
   const client = new DigestFetch(publicKey, privateKey)
   try {
-    const resp = await client.fetch(url, {method: 'post'})
+    const resp = await client.fetch(url, {method: 'POST'})
     const data = await resp.json()
     log(data['username'])
     const sqlUser: SqlUser = JSON.parse(JSON.stringify(data))

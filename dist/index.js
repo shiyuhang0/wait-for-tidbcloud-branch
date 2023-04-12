@@ -185,9 +185,10 @@ function sqluser(externalID, log, publicKey, privateKey) {
         }
         log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID}, branchID ${branchID} and branchName ${branchName}`);
         const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`;
+        log(`request url: ${url}`);
         const client = new digest_fetch_1.default(publicKey, privateKey);
         try {
-            const resp = yield client.fetch(url, { method: 'post' });
+            const resp = yield client.fetch(url, { method: 'POST' });
             const data = yield resp.json();
             log(data['username']);
             const sqlUser = JSON.parse(JSON.stringify(data));
