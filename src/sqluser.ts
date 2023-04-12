@@ -9,12 +9,12 @@ interface BranchInfo {
 
 export class SqlUser {
   host: string
-  user: string
+  username: string
   password: string
 
   constructor(host: string, user: string, password: string) {
     this.host = host
-    this.user = user
+    this.username = user
     this.password = password
   }
 }
@@ -50,7 +50,7 @@ export async function sqluser(
   const client = new DigestFetch(publicKey, privateKey)
   let sqlUser: SqlUser = new SqlUser('', '', '')
   try {
-    const resp = await client.fetch(url)
+    const resp = await client.fetch(url, {method: 'post'})
     const data = await resp.json()
     sqlUser = JSON.parse(JSON.stringify(data))
     log(`get sqlUser`)
