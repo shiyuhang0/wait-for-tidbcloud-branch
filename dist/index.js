@@ -185,8 +185,19 @@ function sqluser(externalID, log, publicKey, privateKey) {
         log(`publicKey is: ${publicKey},privateKey is: ${privateKey}`);
         const client = new digest_fetch_1.default(publicKey, privateKey);
         const resp = yield client.fetch(url);
+        const data1 = resp.json();
         // eslint-disable-next-line no-console
-        console.log(resp.body);
+        console.log(resp);
+        // eslint-disable-next-line no-console
+        console.log(data1);
+        client
+            .fetch(url)
+            // eslint-disable-next-line github/no-then,no-shadow
+            .then(resp => resp.json())
+            // eslint-disable-next-line github/no-then,no-console
+            .then(data => console.log(data))
+            // eslint-disable-next-line github/no-then,no-console
+            .catch(e => console.error(e));
         return new SqlUser('fakehost', 'fakeuser', 'fakepassword');
     });
 }
