@@ -17,6 +17,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           publicKey: ${{ secrets.TIDB_CLOUD_PUBLIC_KEY }}
           privateKey: ${{ secrets.TIDB_CLOUD_PRIVATE_KEY }}
+          addMask: false
       - name: Use the output
         run: |
             echo "The host is ${{ steps.wait-for-branch.outputs.host }}"
