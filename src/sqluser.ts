@@ -41,27 +41,18 @@ export async function sqluser(
   ) {
     throw new Error('Invalid externalID from TiDB Cloud Branch check')
   }
-  log(
-    `Start to get Sql User with projectID ${projectID}, clusterID ${clusterID}, branchID ${branchID} and branchName ${branchName}`
-  )
 
   const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`
 
-  log(`request url: ${url}`)
+  log(`request url to get sql user: ${url}`)
+
   const client = new DigestFetch(publicKey, privateKey)
-  try {
-    const resp = await client.fetch(url, {method: 'POST'})
-    const data = await resp.json()
-    if (data['username'] === undefined || data['password'] === undefined) {
-      throw new Error(
-        `Can not get sql user with response: ${JSON.stringify(data)}`
-      )
-    }
-    const sqlUser: SqlUser = new SqlUser('', data['username'], data['password'])
-    log(`get sqlUser: ${sqlUser}`)
-    log(`get sqlUser: ${JSON.stringify(sqlUser)}`)
-    return sqlUser
-  } catch (error) {
-    throw error
+  const resp = await client.fetch(url, {method: 'POST'})
+  const data = await resp.json()
+  if (data['username'] === undefined || data['password'] === undefined) {
+    throw new Error(
+      `Can not get sql user with response: ${JSON.stringify(data)}`
+    )
   }
+  return new SqlUser('', data['username'], data['password'])
 }

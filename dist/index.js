@@ -183,24 +183,15 @@ function sqluser(externalID, log, publicKey, privateKey) {
             branchName === undefined) {
             throw new Error('Invalid externalID from TiDB Cloud Branch check');
         }
-        log(`Start to get Sql User with projectID ${projectID}, clusterID ${clusterID}, branchID ${branchID} and branchName ${branchName}`);
         const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`;
-        log(`request url: ${url}`);
+        log(`request url to get sql user: ${url}`);
         const client = new digest_fetch_1.default(publicKey, privateKey);
-        try {
-            const resp = yield client.fetch(url, { method: 'POST' });
-            const data = yield resp.json();
-            if (data['username'] === undefined || data['password'] === undefined) {
-                throw new Error(`Can not get sql user with response: ${JSON.stringify(data)}`);
-            }
-            const sqlUser = new SqlUser('', data['username'], data['password']);
-            log(`get sqlUser: ${sqlUser}`);
-            log(`get sqlUser: ${JSON.stringify(sqlUser)}`);
-            return sqlUser;
+        const resp = yield client.fetch(url, { method: 'POST' });
+        const data = yield resp.json();
+        if (data['username'] === undefined || data['password'] === undefined) {
+            throw new Error(`Can not get sql user with response: ${JSON.stringify(data)}`);
         }
-        catch (error) {
-            throw error;
-        }
+        return new SqlUser('', data['username'], data['password']);
     });
 }
 exports.sqluser = sqluser;
