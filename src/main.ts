@@ -37,7 +37,8 @@ async function run(): Promise<void> {
       result.externalID,
       msg => core.info(msg),
       core.getInput('publicKey'),
-      core.getInput('privateKey')
+      core.getInput('privateKey'),
+      core.getInput('env')
     )
     if (core.getInput('addMask') === 'true') {
       core.info('addMask is true, set secret for sql user password')

@@ -16,11 +16,16 @@ inputs:
     default: '10'
   publicKey:
     description: 'The public key of TiDB Cloud API.'
+    required: true
   privateKey:
     description: 'The private key of TiDB Cloud API.'
+    required: true
   addMask:
     description: 'Whether to add mask for the output.'
     default: 'true'
+  env:
+    description: 'The environment. Available values: dev, staging, prod.'
+    default: 'prod'
 
 runs:
   using: 'node16'

@@ -19,13 +19,12 @@ export class SqlUser {
   }
 }
 
-const host = 'https://api.dev.tidbcloud.com'
-
 export async function sqluser(
   externalID: string,
   log: (message: string) => void,
   publicKey: string,
-  privateKey: string
+  privateKey: string,
+  env: string
 ): Promise<SqlUser> {
   log(`Start to get Sql User with externalID ${externalID}`)
   const branchInfo: BranchInfo = JSON.parse(externalID)
@@ -40,6 +39,14 @@ export async function sqluser(
     branchName === undefined
   ) {
     throw new Error('Invalid externalID from TiDB Cloud Branch check')
+  }
+
+  let host = 'https://api.tidbcloud.com'
+  if (env === 'dev') {
+    host = 'https://api.dev.tidbcloud.com'
+  }
+  if (env === 'staging') {
+    host = 'https://api.staging.tidbcloud.com'
   }
 
   const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`

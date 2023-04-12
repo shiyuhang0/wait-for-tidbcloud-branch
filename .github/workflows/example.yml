@@ -18,6 +18,7 @@ jobs:
           publicKey: ${{ secrets.TIDB_CLOUD_PUBLIC_KEY }}
           privateKey: ${{ secrets.TIDB_CLOUD_PRIVATE_KEY }}
           addMask: false
+          env: dev
       - name: Use the output
         run: |
             echo "The host is ${{ steps.wait-for-branch.outputs.host }}"

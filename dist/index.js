@@ -66,7 +66,7 @@ function run() {
             if (result.externalID === null || result.externalID === '') {
                 throw new Error('externalID is empty with success conclusion');
             }
-            const sqlUser = yield (0, sqluser_1.sqluser)(result.externalID, msg => core.info(msg), core.getInput('publicKey'), core.getInput('privateKey'));
+            const sqlUser = yield (0, sqluser_1.sqluser)(result.externalID, msg => core.info(msg), core.getInput('publicKey'), core.getInput('privateKey'), core.getInput('env'));
             if (core.getInput('addMask') === 'true') {
                 core.info('addMask is true, set secret for sql user password');
                 core.setSecret(sqlUser.password);
@@ -169,8 +169,7 @@ class SqlUser {
     }
 }
 exports.SqlUser = SqlUser;
-const host = 'https://api.dev.tidbcloud.com';
-function sqluser(externalID, log, publicKey, privateKey) {
+function sqluser(externalID, log, publicKey, privateKey, env) {
     return __awaiter(this, void 0, void 0, function* () {
         log(`Start to get Sql User with externalID ${externalID}`);
         const branchInfo = JSON.parse(externalID);
@@ -183,6 +182,13 @@ function sqluser(externalID, log, publicKey, privateKey) {
             branchID === undefined ||
             branchName === undefined) {
             throw new Error('Invalid externalID from TiDB Cloud Branch check');
+        }
+        let host = 'https://api.tidbcloud.com';
+        if (env === 'dev') {
+            host = 'https://api.dev.tidbcloud.com';
+        }
+        if (env === 'staging') {
+            host = 'https://api.staging.tidbcloud.com';
         }
         const url = `${host}/api/internal/projects/${projectID}/clusters/${clusterID}/branches/shiyuhang0-patch-5_13_b38da50/users`;
         log(`request url to get sql user: ${url}`);
