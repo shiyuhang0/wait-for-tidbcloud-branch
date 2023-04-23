@@ -5,6 +5,7 @@ A JavaScript action that works with [TiDB Cloud App](https://github.com/apps/tid
 - Wait for TiDB Cloud Branch check which created by TiDB Cloud App to complete.
 - Generate a SQL user for this TiDB Cloud branch.
 
+
 ## Usage
 
 ```
